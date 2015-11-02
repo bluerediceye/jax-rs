@@ -9,11 +9,13 @@ import java.util.List;
 
 /**
  * Created by Ming.Li on 02/11/2015.
+ *
+ * @author Ming Li
  */
 public class ActivityRepositoryStub implements ActivityRepository {
 
     @Override
-    public List<Activity> findAllActivities(){
+    public List<Activity> findAllActivities() {
         List<Activity> activities = new ArrayList<>();
 
         Activity activity1 = new Activity();
@@ -33,6 +35,10 @@ public class ActivityRepositoryStub implements ActivityRepository {
 
     @Override
     public Activity findActivity(String activityId) {
+        if("12".equals(activityId)){
+            return null;
+        }
+
         Activity activity1 = new Activity();
         activity1.setId("1234");
         activity1.setDescription("Swimming");
@@ -44,5 +50,15 @@ public class ActivityRepositoryStub implements ActivityRepository {
 
         activity1.setUser(user);
         return activity1;
+    }
+
+    @Override
+    public void create(Activity activity) {
+        //todo should issue an insert statement to database.
+    }
+
+    @Override
+    public void update(Activity activity) {
+        //todo should issue an update statement to database.
     }
 }

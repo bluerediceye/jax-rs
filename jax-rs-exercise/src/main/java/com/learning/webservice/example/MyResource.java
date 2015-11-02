@@ -7,6 +7,8 @@ import javax.ws.rs.core.MediaType;
 
 /**
  * Root resource (exposed at "myresource" path)
+ *
+ * @author Ming Li
  */
 @Path("myresource")
 public class MyResource {

@@ -4,6 +4,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Created by Ming.Li on 02/11/2015.
+ *
+ * @author Ming Li
  */
 @XmlRootElement
 public class User {
