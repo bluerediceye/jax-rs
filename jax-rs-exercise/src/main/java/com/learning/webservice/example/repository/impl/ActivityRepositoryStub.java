@@ -1,6 +1,7 @@
 package com.learning.webservice.example.repository.impl;
 
 import com.learning.webservice.example.model.Activity;
+import com.learning.webservice.example.model.User;
 import com.learning.webservice.example.repository.ActivityRepository;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.List;
 public class ActivityRepositoryStub implements ActivityRepository {
 
     @Override
-    public List<Activity> findAllActivity(){
+    public List<Activity> findAllActivities(){
         List<Activity> activities = new ArrayList<>();
 
         Activity activity1 = new Activity();
@@ -28,5 +29,20 @@ public class ActivityRepositoryStub implements ActivityRepository {
         activities.add(activity2);
 
         return activities;
+    }
+
+    @Override
+    public Activity findActivity(String activityId) {
+        Activity activity1 = new Activity();
+        activity1.setId("1234");
+        activity1.setDescription("Swimming");
+        activity1.setDuration(45);
+
+        User user = new User();
+        user.setId("123");
+        user.setName("Ming");
+
+        activity1.setUser(user);
+        return activity1;
     }
 }

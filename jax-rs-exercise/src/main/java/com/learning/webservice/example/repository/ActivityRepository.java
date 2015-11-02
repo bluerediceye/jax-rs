@@ -8,5 +8,7 @@ import java.util.List;
  * Created by Ming.Li on 02/11/2015.
  */
 public interface ActivityRepository {
-    List<Activity> findAllActivity();
+    List<Activity> findAllActivities();
+
+    Activity findActivity(String activityId);
 }
