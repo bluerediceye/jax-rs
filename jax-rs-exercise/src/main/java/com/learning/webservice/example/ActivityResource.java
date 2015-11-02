@@ -5,11 +5,9 @@ import com.learning.webservice.example.model.User;
 import com.learning.webservice.example.repository.ActivityRepository;
 import com.learning.webservice.example.repository.impl.ActivityRepositoryStub;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import java.util.List;
 
 /**
@@ -20,6 +18,14 @@ import java.util.List;
 public class ActivityResource {
 
     private ActivityRepository activityRepository = new ActivityRepositoryStub();
+
+    @POST
+    @Path("{activity}")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Activity createActivityParams(MultivaluedMap<String, String> formParams){
+        return null;
+    }
+
 
     @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
