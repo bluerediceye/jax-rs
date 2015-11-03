@@ -25,12 +25,12 @@
             <version>16.0.1</version>
         </dependency>
 
-        <!-- uncomment this to get JSON support: -->
         <!-- <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-moxy</artifactId>
         </dependency>-->
 
+        <!-- Replacee jersey-media-moxy with jersey-media-json-jackson -->
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-jackson</artifactId>
