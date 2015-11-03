@@ -8,11 +8,8 @@
 
 package com.learning.webservice.example;
 
-import org.glassfish.hk2.utilities.binding.AbstractBinder;
-import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.TestProperties;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,10 +18,14 @@ import javax.ws.rs.core.Application;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by Ming.Li on 03/11/2015.
@@ -50,46 +51,69 @@ public class BookResourceTest extends JerseyTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        book1_id = addBook("Author 1", "Title 1", new Date(), "1234").readEntity(Book.class).getId();
-        book2_id = addBook("Author 2", "Title 2", new Date(), "2345").readEntity(Book.class).getId();
+        book1_id = (String) toHashMap(addBook("Author 1", "Title 1", new Date(), "1234")).get("id");
+        book2_id = (String) toHashMap(addBook("Author 2", "Title 2", new Date(), "2345")).get("id");
     }
 
     @Test
     public void testGetBook() {
-        Book response = target("books").path(book1_id).request().get(Book.class);
-
+        HashMap<String, Object> response = toHashMap(target("books").path(book1_id).request().get());
         assertNotNull(response);
-        assertEquals("Title 1", response.getTitle());
-        assertEquals("Author 1", response.getAuthor());
+        assertEquals("Title 1", response.get("title"));
+        assertEquals("Author 1", response.get("author"));
     }
 
     @Test
     public void testGetBooks() {
-        Collection<Book> books = target("books").request().get(new GenericType<Collection<Book>>() {
-        });
-        assertNotNull(books);
-        assertEquals(2, books.size());
+        Collection<HashMap<String, Object>> response = target("books").request().get(new GenericType<Collection<HashMap<String, Object>>>(){});
+        assertNotNull(response);
+        assertEquals(3, response.size());
     }
 
     @Test
-    public void testAddBook(){
-        Response response = addBook("Ming", "Hell World", new Date(), "123456");
+    public void testAddBook() throws ParseException {
+        Date thisDate = new Date();
+        Response response = addBook("Ming", "Hell World", thisDate, "123456");
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
         assertEquals(200, response.getStatus());
-        Book responseBook = response.readEntity(Book.class);
-        assertEquals("Hell World", responseBook.getTitle());
-        assertEquals("Ming", responseBook.getAuthor());
-        assertEquals("123456", responseBook.getIsbn());
+        HashMap<String, Object> responseBook = toHashMap(response);
+        assertEquals("Hell World", responseBook.get("title"));
+        assertEquals("Ming", responseBook.get("author"));
+        assertEquals("123456", responseBook.get("isbn"));
+        assertEquals(thisDate, dateFormat.parse((String) responseBook.get("published")));
 
     }
 
-    protected Response addBook(String author, String title, Date published, String isbn){
-        Book book = new Book();
-        book.setAuthor(author);
-        book.setTitle(title);
-        book.setPublished(published);
-        book.setIsbn(isbn);
+    @Test
+    public void testAddExtraField(){
+        Response response = addBook("author", "title", new Date(), "9999", "hello china");
+        assertEquals(200, response.getStatus());
+
+        HashMap<String, Object> book = toHashMap(response);
+        assertNotNull(book.get("id"));
+        assertNotNull("hello china", book.get("extra1"));
+    }
+
+    protected Response addBook(String author, String title, Date published, String isbn, String... args){
+        HashMap<String, Object> book = new HashMap<>();
+        book.put("author", author);
+        book.put("title", title);
+        book.put("published", published);
+        book.put("isbn", isbn);
+        if(args != null){
+            int count = 1;
+            for(String s : args){
+                book.put("extra"+count++, s);
+            }
+        }
+
         return target("books").request(MediaType.APPLICATION_JSON_TYPE)
                 .post(Entity.entity(book, MediaType.APPLICATION_JSON_TYPE));
+    }
+
+    protected HashMap<String, Object> toHashMap(Response response){
+        return response.readEntity(new GenericType<HashMap<String, Object>>(){});
     }
 }

@@ -8,18 +8,28 @@
 
 package com.learning.webservice.example;
 
+import com.fasterxml.jackson.annotation.*;
+
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by Ming.Li on 03/11/2015.
+ *
+ * @author Ming.Li
  */
+@JsonPropertyOrder(value = {"id", "author"})
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Book {
 
-    private String id;
     private String title;
     private String author;
     private String isbn;
     private Date published;
+    private String id;
+
+    private HashMap<String, Object> extras = new HashMap<>();
 
     public String getId() {
         return id;
@@ -59,5 +69,15 @@ public class Book {
 
     public void setPublished(Date published) {
         this.published = published;
+    }
+
+    @JsonAnyGetter
+    public HashMap<String, Object> getExtras() {
+        return extras;
+    }
+
+    @JsonAnySetter
+    public void setExtras(String key, Object value) {
+        this.extras.put(key, value);
     }
 }

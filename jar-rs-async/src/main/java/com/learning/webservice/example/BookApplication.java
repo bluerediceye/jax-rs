@@ -10,6 +10,7 @@ package com.learning.webservice.example;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
+import com.fasterxml.jackson.jaxrs.xml.JacksonXMLProvider;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
 
@@ -24,6 +25,7 @@ public class BookApplication extends ResourceConfig {
         // create a resource config that scans for JAX-RS resources and providers
         // in com.learning.webservice.example package
         JacksonJaxbJsonProvider provider = new JacksonJaxbJsonProvider();
+        JacksonXMLProvider xmlProvider = new JacksonXMLProvider();
         provider.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         packages("com.learning.webservice.example")
                 .register(new AbstractBinder() {
@@ -32,7 +34,7 @@ public class BookApplication extends ResourceConfig {
                         bind(bookDao).to(BookDao.class);
                     }
                 })
-                .register(provider);
-        ;
+                .register(provider)
+                .register(xmlProvider);
     }
 }

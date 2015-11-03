@@ -13,6 +13,7 @@ import jersey.repackaged.com.google.common.util.concurrent.ListeningExecutorServ
 import jersey.repackaged.com.google.common.util.concurrent.MoreExecutors;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,6 +33,15 @@ public class BookDao {
 
     public BookDao(){
         books = new ConcurrentHashMap<>();
+
+        Book testBook = new Book();
+        testBook.setId("4");
+        testBook.setAuthor("Ming");
+        testBook.setIsbn("4234");
+        testBook.setTitle("Hell");
+        testBook.setPublished(new Date());
+        books.put(testBook.getId(), testBook);
+
         service = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(10));
     }
 
