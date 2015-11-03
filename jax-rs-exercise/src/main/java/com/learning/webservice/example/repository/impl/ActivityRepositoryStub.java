@@ -61,4 +61,14 @@ public class ActivityRepositoryStub implements ActivityRepository {
     public void update(Activity activity) {
         //todo should issue an update statement to database.
     }
+
+    @Override
+    public void delete(String activityId) {
+        //todo should issue a delete statement to database.
+    }
+
+    @Override
+    public List<Activity> findByDescription() {
+        return findAllActivities();
+    }
 }

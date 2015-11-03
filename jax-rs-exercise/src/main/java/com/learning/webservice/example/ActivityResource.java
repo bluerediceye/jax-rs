@@ -89,4 +89,14 @@ public class ActivityResource {
         Activity activity = activityRepository.findActivity(activityId);
         return activity.getUser();
     }
+
+    @DELETE
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Path("{activityId}")
+    public Response delete(@PathParam("activityId") String activityId){
+        activityRepository.delete(activityId);
+        return Response.ok().build();
+    }
+
 }
