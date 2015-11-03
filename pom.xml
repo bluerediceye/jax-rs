@@ -18,6 +18,7 @@
         <module>jax-rs-standalone-server</module>
         <module>jax-rs-webapp-server</module>
         <module>jax-rs-exercise</module>
+        <module>jar-rs-async</module>
     </modules>
 
     <dependencyManagement>
@@ -35,6 +36,13 @@
                 <version>3.0.1</version>
                 <scope>provided</scope>
             </dependency>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.9</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -50,6 +58,11 @@
                         <source>1.8</source>
                         <target>1.8</target>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>1.2.1</version>
                 </plugin>
             </plugins>
         </pluginManagement>
