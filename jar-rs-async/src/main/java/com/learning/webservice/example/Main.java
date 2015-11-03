@@ -1,6 +1,7 @@
 package com.learning.webservice.example;
 
 import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
@@ -20,9 +21,12 @@ public class Main {
      * @return Grizzly HTTP server.
      */
     public static HttpServer startServer() {
+
+        final BookDao bookDao = new BookDao();
+
         // create a resource config that scans for JAX-RS resources and providers
         // in com.learning.webservice.example package
-        final ResourceConfig rc = new ResourceConfig().packages("com.learning.webservice.example");
+        final ResourceConfig rc = new BookApplication(bookDao);
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
@@ -31,7 +35,7 @@ public class Main {
 
     /**
      * Main method.
-     * @param args
+     * @param args JVM arguments provided when starting the application.
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
