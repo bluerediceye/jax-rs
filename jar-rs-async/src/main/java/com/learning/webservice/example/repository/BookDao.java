@@ -13,11 +13,13 @@ import com.learning.webservice.example.model.Book;
 import jersey.repackaged.com.google.common.util.concurrent.ListenableFuture;
 import jersey.repackaged.com.google.common.util.concurrent.ListeningExecutorService;
 import jersey.repackaged.com.google.common.util.concurrent.MoreExecutors;
+import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 
@@ -26,6 +28,7 @@ import java.util.concurrent.Executors;
  *
  * @author Ming.Li
  */
+@Repository
 public class BookDao {
 
     private Map<String, Book> books;
@@ -68,8 +71,13 @@ public class BookDao {
         }
     }
 
-    public ListenableFuture<Book> updateAsync(String id, Book book){
-        return service.submit(() -> update(id, book));
+    public ListenableFuture<Book> updateAsync(final String id, final Book book){
+        return service.submit(new Callable<Book>() {
+            @Override
+            public Book call() throws Exception {
+                return BookDao.this.update(id, book);
+            }
+        });
     }
 
     public Collection<Book> getBooks(){
@@ -77,7 +85,12 @@ public class BookDao {
     }
 
     public ListenableFuture<Collection<Book>> getBooksAsync(){
-        return service.submit(this::getBooks);
+        return service.submit(new Callable<Collection<Book>>() {
+            @Override
+            public Collection<Book> call() throws Exception {
+                return BookDao.this.getBooks();
+            }
+        });
     }
 
     public Book getBook(String id) throws BookNotFoundException{
@@ -89,8 +102,13 @@ public class BookDao {
 
     }
 
-    public ListenableFuture<Book> getBookAsync(String id){
-        return service.submit(() -> getBook(id));
+    public ListenableFuture<Book> getBookAsync(final String id){
+        return service.submit(new Callable<Book>() {
+            @Override
+            public Book call() throws Exception {
+                return BookDao.this.getBook(id);
+            }
+        });
     }
 
     public Book addBook(Book book){
@@ -100,6 +118,11 @@ public class BookDao {
     }
 
     public ListenableFuture<Book> addBookAsync(final Book book){
-        return service.submit(() -> addBook(book));
+        return service.submit(new Callable<Book>() {
+            @Override
+            public Book call() throws Exception {
+                return BookDao.this.addBook(book);
+            }
+        });
     }
 }

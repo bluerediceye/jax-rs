@@ -1,18 +1,10 @@
-/*
- * Copyright (c) 2015. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
- * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
- * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
- * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
- * Vestibulum commodo. Ut rhoncus gravida arcu.
- */
-
 package com.learning.webservice.example;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import com.learning.webservice.example.repository.BookDao;
+import com.learning.webservice.example.config.JerseyConfig;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.grizzly.connector.GrizzlyConnectorProvider;
 import org.glassfish.jersey.test.JerseyTest;
@@ -46,9 +38,7 @@ public class BookResourceTest extends JerseyTest {
 
 //        enable(TestProperties.LOG_TRAFFIC);
 //        enable(TestProperties.DUMP_ENTITY);
-
-        final BookDao bookDao = new BookDao();
-        return new Application(bookDao);
+        return new JerseyConfig();
     }
 
     @Override
@@ -223,7 +213,7 @@ public class BookResourceTest extends JerseyTest {
     @Test
     public void testPoweredByFilter(){
         Response xmlResponse = target("books").path(book1_id + ".xml").request().get();
-        assertEquals("Ming", xmlResponse.getHeaderString("X-Powered-By"));
+        assertEquals("Super Hero", xmlResponse.getHeaderString("X-Powered-By"));
     }
 
     protected Response addBook(String author, String title, Date published, String isbn, String... args){

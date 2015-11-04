@@ -16,8 +16,13 @@ import jersey.repackaged.com.google.common.util.concurrent.FutureCallback;
 import jersey.repackaged.com.google.common.util.concurrent.Futures;
 import jersey.repackaged.com.google.common.util.concurrent.ListenableFuture;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.glassfish.jersey.process.internal.RequestScoped;
+import org.glassfish.jersey.server.ContainerRequest;
 import org.glassfish.jersey.server.ManagedAsync;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import javax.inject.Singleton;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
@@ -32,12 +37,13 @@ import java.util.Collection;
  * @author Ming.Li
  */
 @Path(("books"))
+@Component
 public class BookResource {
 
     @Context
-    private Request request;
+    private ContainerRequest request;
 
-    @Context
+    @Autowired
     private BookDao bookDao;
 
 /*    @GET
@@ -51,7 +57,7 @@ public class BookResource {
     @Produces({"application/json;qs=1", "application/xml;qs=0.5"})
     @ManagedAsync
     @PoweredBy("Super Hero")
-    public void getBook(@PathParam("id") String id, @Suspended AsyncResponse response) {
+    public void getBook(@PathParam("id") String id, @Suspended final AsyncResponse response) {
         ListenableFuture<Book> bookFuture = bookDao.getBookAsync(id);
         Futures.addCallback(bookFuture, new FutureCallback<Book>() {
             @Override
@@ -75,7 +81,7 @@ public class BookResource {
     @GET
     @Produces({"application/json;qs=1", "application/xml;qs=0.5"})
     @ManagedAsync
-    public void getBooks(@Suspended AsyncResponse response) {
+    public void getBooks(@Suspended final AsyncResponse response) {
         ListenableFuture<Collection<Book>> bookFuture = bookDao.getBooksAsync();
         Futures.addCallback(bookFuture, new FutureCallback<Collection<Book>>() {
             @Override
@@ -94,7 +100,7 @@ public class BookResource {
     @Produces({"application/json;qs=1", "application/xml;qs=0.5"})
     @Consumes(MediaType.APPLICATION_JSON)
     @ManagedAsync
-    public void addBook(@Valid @NotNull Book book, @Suspended AsyncResponse response) {
+    public void addBook(@Valid @NotNull Book book, @Suspended final AsyncResponse response) {
         ListenableFuture<Book> bookFuture = bookDao.addBookAsync(book);
         Futures.addCallback(bookFuture, new FutureCallback<Book>() {
             @Override
@@ -114,7 +120,7 @@ public class BookResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @ManagedAsync
     @Produces({"application/json;qs=1", "application/xml;qs=0.5"})
-    public void updateBook(@PathParam("id") String id, Book book, @Suspended AsyncResponse response){
+    public void updateBook(@PathParam("id") final String id, final Book book, @Suspended final AsyncResponse response){
         ListenableFuture<Book> getBookFuture = bookDao.getBookAsync(id);
         Futures.addCallback(getBookFuture, new FutureCallback<Book>() {
             @Override
