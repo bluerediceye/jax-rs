@@ -14,15 +14,22 @@
     <name>jar-rs-async</name>
 
     <dependencies>
+        <!-- Jersey dependencies -->
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-grizzly2-http</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>16.0.1</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>4.0.0.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
         </dependency>
 
         <!-- <dependency>
@@ -30,12 +37,13 @@
             <artifactId>jersey-media-moxy</artifactId>
         </dependency>-->
 
-        <!-- Replacee jersey-media-moxy with jersey-media-json-jackson -->
+        <!-- Replacment of jersey-media-moxy -->
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-jackson</artifactId>
         </dependency>
 
+        <!-- Support XML marshalling and unmarshalling -->
         <dependency>
             <groupId>com.fasterxml.jackson.jaxrs</groupId>
             <artifactId>jackson-jaxrs-xml-provider</artifactId>
@@ -47,17 +55,25 @@
             <artifactId>jersey-bean-validation</artifactId>
         </dependency>
 
+        <!-- Tool libraries -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>18.0</version>
+        </dependency>
+
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.9</version>
         </dependency>
 
+        <!-- Replacement of the default http connector in JDK-->
         <dependency>
             <groupId>org.glassfish.jersey.connectors</groupId>
             <artifactId>jersey-grizzly-connector</artifactId>
         </dependency>
 
+        <!-- All test libraries go below -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -70,10 +86,11 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- A light weight xml library -->
         <dependency>
             <groupId>com.jcabi</groupId>
             <artifactId>jcabi-xml</artifactId>
-            <version>0.7.8</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -82,13 +99,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
                 <inherited>true</inherited>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>1.2.1</version>
                 <executions>
                     <execution>
                         <goals>
