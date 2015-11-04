@@ -45,8 +45,13 @@ public class BookDao {
         return service.submit(this::getBooks);
     }
 
-    public Book getBook(String id){
-        return books.get(id);
+    public Book getBook(String id) throws BookNotFoundException{
+        if(books.containsKey(id)){
+            return books.get(id);
+        } else{
+            throw new BookNotFoundException("Book not found: " + id);
+        }
+
     }
 
     public ListenableFuture<Book> getBookAsync(String id){

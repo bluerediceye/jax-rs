@@ -19,10 +19,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Application;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -46,8 +43,8 @@ public class BookResourceTest extends JerseyTest {
     @Override
     protected Application configure() {
 
-        enable(TestProperties.LOG_TRAFFIC);
-        enable(TestProperties.DUMP_ENTITY);
+//        enable(TestProperties.LOG_TRAFFIC);
+//        enable(TestProperties.DUMP_ENTITY);
 
         final BookDao bookDao = new BookDao();
         return new BookApplication(bookDao);
@@ -136,6 +133,24 @@ public class BookResourceTest extends JerseyTest {
     public void testAddNoBook(){
         Response response = target("books").request().post(null);
         assertEquals(400 ,response.getStatus());
+    }
+
+    @Test
+    public void testBookNotFound(){
+        Response response = target("books").path("1").request().get();
+        assertEquals(404, response.getStatus());
+
+        String message = response.readEntity(String.class);
+        assertEquals("Book not found: 1", message);
+    }
+
+    @Test
+    public void testBookEntityTagNotModified(){
+        EntityTag entityTag = target("books").path(book1_id).request().get().getEntityTag();
+        assertNotNull(entityTag);
+
+        Response response = target("books").path(book1_id).request().header("If-None-Match", entityTag).get();
+        assertEquals(304, response.getStatus());
     }
 
     protected Response addBook(String author, String title, Date published, String isbn, String... args){
