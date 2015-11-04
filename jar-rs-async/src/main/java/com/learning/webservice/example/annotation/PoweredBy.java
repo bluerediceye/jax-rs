@@ -6,9 +6,9 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.learning.webservice.example;
+package com.learning.webservice.example.annotation;
 
-import javax.ws.rs.HttpMethod;
+import javax.ws.rs.NameBinding;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -16,12 +16,10 @@ import java.lang.annotation.Target;
 
 /**
  * Created by Ming.Li on 04/11/2015.
- *
- * @author Ming.Li
  */
-
-@Target(ElementType.METHOD)
+@NameBinding
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-@HttpMethod("PATCH")
-public @interface PATCH {
+public @interface PoweredBy {
+    String value() default "";
 }

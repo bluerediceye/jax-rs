@@ -1,5 +1,17 @@
-package com.learning.webservice.example;
+/*
+ * Copyright (c) 2015. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
 
+package com.learning.webservice.example.resource;
+
+import com.learning.webservice.example.repository.BookDao;
+import com.learning.webservice.example.annotation.PATCH;
+import com.learning.webservice.example.annotation.PoweredBy;
+import com.learning.webservice.example.model.Book;
 import jersey.repackaged.com.google.common.util.concurrent.FutureCallback;
 import jersey.repackaged.com.google.common.util.concurrent.Futures;
 import jersey.repackaged.com.google.common.util.concurrent.ListenableFuture;
@@ -38,6 +50,7 @@ public class BookResource {
     @GET
     @Produces({"application/json;qs=1", "application/xml;qs=0.5"})
     @ManagedAsync
+    @PoweredBy("Super Hero")
     public void getBook(@PathParam("id") String id, @Suspended AsyncResponse response) {
         ListenableFuture<Book> bookFuture = bookDao.getBookAsync(id);
         Futures.addCallback(bookFuture, new FutureCallback<Book>() {
@@ -130,10 +143,6 @@ public class BookResource {
                 response.resume(t);
             }
         });
-
-
-
-
     }
 
     private EntityTag generateEntityTag(final Book book) {

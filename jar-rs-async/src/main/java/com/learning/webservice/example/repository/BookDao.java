@@ -1,5 +1,15 @@
-package com.learning.webservice.example;
+/*
+ * Copyright (c) 2015. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
 
+package com.learning.webservice.example.repository;
+
+import com.learning.webservice.example.exception.BookNotFoundException;
+import com.learning.webservice.example.model.Book;
 import jersey.repackaged.com.google.common.util.concurrent.ListenableFuture;
 import jersey.repackaged.com.google.common.util.concurrent.ListeningExecutorService;
 import jersey.repackaged.com.google.common.util.concurrent.MoreExecutors;

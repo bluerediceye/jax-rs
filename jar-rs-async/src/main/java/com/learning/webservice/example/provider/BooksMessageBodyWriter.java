@@ -6,11 +6,12 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.learning.webservice.example;
+package com.learning.webservice.example.provider;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.learning.webservice.example.model.Book;
 
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;

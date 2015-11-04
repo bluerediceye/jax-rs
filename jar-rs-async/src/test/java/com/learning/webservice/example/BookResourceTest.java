@@ -12,10 +12,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import com.learning.webservice.example.repository.BookDao;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.grizzly.connector.GrizzlyConnectorProvider;
 import org.glassfish.jersey.test.JerseyTest;
-import org.glassfish.jersey.test.TestProperties;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -198,6 +198,33 @@ public class BookResourceTest extends JerseyTest {
         assertEquals(200, response3.getStatus());
     }
 
+    @Test
+    public void testPatchOverride(){
+        HashMap<String, Object> book = new HashMap<>();
+        book.put("author", "Awesome");
+        Response response = target("books").path(book1_id).queryParam("_method", "PATCH")
+                .request().post(Entity.entity(book, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(200, response.getStatus());
+
+        Response getResponse = target("books").path(book1_id).request().get();
+        HashMap<String, Object> getRespMap = toHashMap(getResponse);
+        assertEquals("Awesome", getRespMap.get("author"));
+    }
+
+    @Test
+    public void testContentNegiotation(){
+        Response xmlResponse = target("books").path(book1_id + ".xml").request().get();
+        assertEquals(MediaType.APPLICATION_XML, xmlResponse.getHeaderString("Content-Type"));
+
+        Response jsonResponse = target("books").path(book1_id + ".json").request().get();
+        assertEquals(MediaType.APPLICATION_JSON, jsonResponse.getHeaderString("Content-Type"));
+    }
+
+    @Test
+    public void testPoweredByFilter(){
+        Response xmlResponse = target("books").path(book1_id + ".xml").request().get();
+        assertEquals("Ming", xmlResponse.getHeaderString("X-Powered-By"));
+    }
 
     protected Response addBook(String author, String title, Date published, String isbn, String... args){
         HashMap<String, Object> book = new HashMap<>();

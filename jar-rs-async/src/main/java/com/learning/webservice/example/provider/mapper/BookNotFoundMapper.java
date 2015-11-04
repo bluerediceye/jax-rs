@@ -6,7 +6,9 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.learning.webservice.example;
+package com.learning.webservice.example.provider.mapper;
+
+import com.learning.webservice.example.exception.BookNotFoundException;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
