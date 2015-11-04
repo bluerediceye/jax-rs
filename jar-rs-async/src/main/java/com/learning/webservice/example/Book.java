@@ -1,14 +1,8 @@
-/*
- * Copyright (c) 2015. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
- * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
- * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
- * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
- * Vestibulum commodo. Ut rhoncus gravida arcu.
- */
-
 package com.learning.webservice.example;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -21,6 +15,7 @@ import java.util.HashMap;
 @JsonPropertyOrder(value = {"id", "author"})
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JacksonXmlRootElement(localName = "book")
 public class Book {
 
     private String title;
@@ -31,6 +26,7 @@ public class Book {
 
     private HashMap<String, Object> extras = new HashMap<>();
 
+    @JacksonXmlProperty(isAttribute = true)
     public String getId() {
         return id;
     }

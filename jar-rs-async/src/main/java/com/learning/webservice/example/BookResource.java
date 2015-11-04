@@ -35,7 +35,7 @@ public class BookResource {
 
     @Path("/{id}")
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({"application/json;qs=1", "application/xml;qs=0.5"})
     @ManagedAsync
     public void getBook(@PathParam("id") String id, @Suspended AsyncResponse response){
         ListenableFuture<Book> bookFuture = bookDao.getBookAsync(id);
@@ -53,7 +53,7 @@ public class BookResource {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({"application/json;qs=1", "application/xml;qs=0.5"})
     @ManagedAsync
     public void getBooks(@Suspended AsyncResponse response){
         ListenableFuture<Collection<Book>> bookFuture = bookDao.getBooksAsync();
@@ -71,11 +71,10 @@ public class BookResource {
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({"application/json;qs=1", "application/xml;qs=0.5"})
     @Consumes(MediaType.APPLICATION_JSON)
     @ManagedAsync
     public void addBook(Book book, @Suspended AsyncResponse response){
-//        response.resume(bookDao.addBook(book));
         ListenableFuture<Book> bookFuture = bookDao.addBookAsync(book);
         Futures.addCallback(bookFuture, new FutureCallback<Book>() {
             @Override

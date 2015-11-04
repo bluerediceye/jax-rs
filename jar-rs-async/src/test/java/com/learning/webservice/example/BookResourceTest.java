@@ -8,6 +8,8 @@
 
 package com.learning.webservice.example;
 
+import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.TestProperties;
 import org.junit.Before;
@@ -94,6 +96,15 @@ public class BookResourceTest extends JerseyTest {
         HashMap<String, Object> book = toHashMap(response);
         assertNotNull(book.get("id"));
         assertNotNull("hello china", book.get("extra1"));
+    }
+
+    @Test
+    public void testGetBookAsString(){
+        String output = target("books").request(MediaType.APPLICATION_XML_TYPE).get().readEntity(String.class);
+        XML xml = new XMLDocument(output);
+        assertEquals("Author 1", xml.xpath("/books/book[@id='" + book1_id + "']/author/text()").get(0));
+        assertEquals("Title 2", xml.xpath("/books/book[@id='" + book2_id + "']/title/text()").get(0));
+        assertEquals(3, xml.xpath("//books/book/author/text()").size());
     }
 
     protected Response addBook(String author, String title, Date published, String isbn, String... args){
