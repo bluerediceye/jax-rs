@@ -42,13 +42,13 @@ public class BookResourceTest extends JerseyTest {
     private String book2_id;
 
     @Override
-    protected Application configure() {
+    protected javax.ws.rs.core.Application configure() {
 
 //        enable(TestProperties.LOG_TRAFFIC);
 //        enable(TestProperties.DUMP_ENTITY);
 
         final BookDao bookDao = new BookDao();
-        return new BookApplication(bookDao);
+        return new Application(bookDao);
     }
 
     @Override
