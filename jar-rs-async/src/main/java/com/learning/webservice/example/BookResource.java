@@ -50,7 +50,6 @@ public class BookResource {
                 } else{
                     response.resume(Response.ok().tag(entityTag).entity(result).build());
                 }
-
             }
 
             @Override
@@ -103,11 +102,27 @@ public class BookResource {
     @ManagedAsync
     @Produces({"application/json;qs=1", "application/xml;qs=0.5"})
     public void updateBook(@PathParam("id") String id, Book book, @Suspended AsyncResponse response){
-        ListenableFuture<Book> bookFuture = bookDao.updateAsync(id, book);
-        Futures.addCallback(bookFuture, new FutureCallback<Book>() {
+        ListenableFuture<Book> getBookFuture = bookDao.getBookAsync(id);
+        Futures.addCallback(getBookFuture, new FutureCallback<Book>() {
             @Override
             public void onSuccess(Book result) {
-                response.resume(result);
+                Response.ResponseBuilder builder = request.evaluatePreconditions(generateEntityTag(result));
+                if(builder != null){
+                    response.resume(builder.build());
+                } else {
+                    ListenableFuture<Book> bookFuture = bookDao.updateAsync(id, book);
+                    Futures.addCallback(bookFuture, new FutureCallback<Book>() {
+                        @Override
+                        public void onSuccess(Book result) {
+                            response.resume(Response.ok().tag(generateEntityTag(result)).build());
+                        }
+
+                        @Override
+                        public void onFailure(Throwable t) {
+                            response.resume(t);
+                        }
+                    });
+                }
             }
 
             @Override
@@ -115,6 +130,10 @@ public class BookResource {
                 response.resume(t);
             }
         });
+
+
+
+
     }
 
     private EntityTag generateEntityTag(final Book book) {

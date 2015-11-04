@@ -167,7 +167,6 @@ public class BookResourceTest extends JerseyTest {
         assertEquals("Awesome", getRespMap.get("author"));
     }
 
-
     @Test
     public void testUpdateBookExtras(){
         HashMap<String, Object> book = new HashMap<>();
@@ -180,6 +179,25 @@ public class BookResourceTest extends JerseyTest {
         HashMap<String, Object> getRespMap = toHashMap(getResponse);
         assertEquals("world", getRespMap.get("hello"));
     }
+
+
+    @Test
+    public void testUpdateIfMatch(){
+        EntityTag entityTag = target("books").path(book1_id).request().get().getEntityTag();
+
+        HashMap<String, Object> updates = new HashMap<>();
+        updates.put("author", "updated author");
+        Entity<HashMap<String, Object>> updateEntity = Entity.entity(updates, MediaType.APPLICATION_JSON_TYPE);
+        Response response = target("books").path(book1_id).request().header("If-Match", entityTag).build("PATCH", updateEntity).invoke();
+        assertEquals(200, response.getStatus());
+
+        Response response2 = target("books").path(book1_id).request().header("If-Match", entityTag).build("PATCH", updateEntity).invoke();
+        assertEquals(412, response2.getStatus());
+
+        Response response3 = target("books").path(book1_id).request().header("If-Match", response.getEntityTag()).build("PATCH", updateEntity).invoke();
+        assertEquals(200, response3.getStatus());
+    }
+
 
     protected Response addBook(String author, String title, Date published, String isbn, String... args){
         HashMap<String, Object> book = new HashMap<>();
