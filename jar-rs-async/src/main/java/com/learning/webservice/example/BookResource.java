@@ -97,6 +97,26 @@ public class BookResource {
         });
     }
 
+    @PATCH
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @ManagedAsync
+    @Produces({"application/json;qs=1", "application/xml;qs=0.5"})
+    public void updateBook(@PathParam("id") String id, Book book, @Suspended AsyncResponse response){
+        ListenableFuture<Book> bookFuture = bookDao.updateAsync(id, book);
+        Futures.addCallback(bookFuture, new FutureCallback<Book>() {
+            @Override
+            public void onSuccess(Book result) {
+                response.resume(result);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                response.resume(t);
+            }
+        });
+    }
+
     private EntityTag generateEntityTag(final Book book) {
         return new EntityTag(DigestUtils.md2Hex(book.getAuthor() + book.getTitle() + book.getPublished() + book.getIsbn() + book.getExtras()));
     }

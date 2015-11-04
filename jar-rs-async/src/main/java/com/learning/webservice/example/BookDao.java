@@ -37,6 +37,31 @@ public class BookDao {
         service = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(10));
     }
 
+    public Book update(String id, Book bookToUpdate) throws BookNotFoundException {
+        if(books.containsKey(id)){
+            Book book = books.get(id);
+            if(book != null){
+                book.setTitle(bookToUpdate.getTitle());
+                book.setAuthor(bookToUpdate.getAuthor());
+                book.setIsbn(bookToUpdate.getIsbn());
+                book.setPublished(bookToUpdate.getPublished());
+                if(bookToUpdate.getExtras() != null){
+                    for(String key : bookToUpdate.getExtras().keySet()){
+                        book.setExtras(key, bookToUpdate.getExtras().get(key));
+                    }
+                }
+            }
+            return book;
+        }
+        else {
+            throw new BookNotFoundException("Book " + id + " not found");
+        }
+    }
+
+    public ListenableFuture<Book> updateAsync(String id, Book book){
+        return service.submit(() -> update(id, book));
+    }
+
     public Collection<Book> getBooks(){
         return books.values();
     }

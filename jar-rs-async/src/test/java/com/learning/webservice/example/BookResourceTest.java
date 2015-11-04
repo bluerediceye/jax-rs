@@ -13,6 +13,7 @@ import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.grizzly.connector.GrizzlyConnectorProvider;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.TestProperties;
 import org.junit.Before;
@@ -55,8 +56,8 @@ public class BookResourceTest extends JerseyTest {
         JacksonJaxbJsonProvider provider = new JacksonJaxbJsonProvider();
         provider.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
         clientConfig.register(provider);
+        clientConfig.connectorProvider(new GrizzlyConnectorProvider());
     }
-
 
     @Before
     public void setUp() throws Exception {
@@ -151,6 +152,33 @@ public class BookResourceTest extends JerseyTest {
 
         Response response = target("books").path(book1_id).request().header("If-None-Match", entityTag).get();
         assertEquals(304, response.getStatus());
+    }
+
+    @Test
+    public void testUpdateBookAuthor(){
+        HashMap<String, Object> book = new HashMap<>();
+        book.put("author", "Awesome");
+        Response response = target("books").path(book1_id)
+                .request().build("PATCH", Entity.entity(book, MediaType.APPLICATION_JSON_TYPE)).invoke();
+        assertEquals(200, response.getStatus());
+
+        Response getResponse = target("books").path(book1_id).request().get();
+        HashMap<String, Object> getRespMap = toHashMap(getResponse);
+        assertEquals("Awesome", getRespMap.get("author"));
+    }
+
+
+    @Test
+    public void testUpdateBookExtras(){
+        HashMap<String, Object> book = new HashMap<>();
+        book.put("hello", "world");
+        Response response = target("books").path(book1_id)
+                .request().build("PATCH", Entity.entity(book, MediaType.APPLICATION_JSON_TYPE)).invoke();
+        assertEquals(200, response.getStatus());
+
+        Response getResponse = target("books").path(book1_id).request().get();
+        HashMap<String, Object> getRespMap = toHashMap(getResponse);
+        assertEquals("world", getRespMap.get("hello"));
     }
 
     protected Response addBook(String author, String title, Date published, String isbn, String... args){
