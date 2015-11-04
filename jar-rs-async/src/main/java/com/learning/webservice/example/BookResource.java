@@ -5,6 +5,8 @@ import jersey.repackaged.com.google.common.util.concurrent.Futures;
 import jersey.repackaged.com.google.common.util.concurrent.ListenableFuture;
 import org.glassfish.jersey.server.ManagedAsync;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
@@ -74,7 +76,7 @@ public class BookResource {
     @Produces({"application/json;qs=1", "application/xml;qs=0.5"})
     @Consumes(MediaType.APPLICATION_JSON)
     @ManagedAsync
-    public void addBook(Book book, @Suspended AsyncResponse response){
+    public void addBook(@Valid @NotNull Book book, @Suspended AsyncResponse response){
         ListenableFuture<Book> bookFuture = bookDao.addBookAsync(book);
         Futures.addCallback(bookFuture, new FutureCallback<Book>() {
             @Override
@@ -88,5 +90,4 @@ public class BookResource {
             }
         });
     }
-
 }

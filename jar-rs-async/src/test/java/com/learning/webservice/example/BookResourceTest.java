@@ -8,8 +8,11 @@
 
 package com.learning.webservice.example;
 
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.TestProperties;
 import org.junit.Before;
@@ -28,6 +31,7 @@ import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Ming.Li on 03/11/2015.
@@ -47,6 +51,13 @@ public class BookResourceTest extends JerseyTest {
 
         final BookDao bookDao = new BookDao();
         return new BookApplication(bookDao);
+    }
+
+    @Override
+    protected void configureClient(ClientConfig clientConfig){
+        JacksonJaxbJsonProvider provider = new JacksonJaxbJsonProvider();
+        provider.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
+        clientConfig.register(provider);
     }
 
 
@@ -105,6 +116,26 @@ public class BookResourceTest extends JerseyTest {
         assertEquals("Author 1", xml.xpath("/books/book[@id='" + book1_id + "']/author/text()").get(0));
         assertEquals("Title 2", xml.xpath("/books/book[@id='" + book2_id + "']/title/text()").get(0));
         assertEquals(3, xml.xpath("//books/book/author/text()").size());
+    }
+
+    @Test
+    public void testAddBookNoAuthor(){
+        Response response = addBook(null, "Title2", new Date(), "1234");
+        assertEquals(400 ,response.getStatus());
+        assertTrue(response.readEntity(String.class).contains("author is required."));
+    }
+
+    @Test
+    public void testAddBookNoTitle(){
+        Response response = addBook("Ming", null, new Date(), "1234");
+        assertEquals(400 ,response.getStatus());
+        assertTrue(response.readEntity(String.class).contains("title is required."));
+    }
+
+    @Test
+    public void testAddNoBook(){
+        Response response = target("books").request().post(null);
+        assertEquals(400 ,response.getStatus());
     }
 
     protected Response addBook(String author, String title, Date published, String isbn, String... args){

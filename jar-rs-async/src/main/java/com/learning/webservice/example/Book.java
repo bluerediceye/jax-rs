@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -18,7 +19,9 @@ import java.util.HashMap;
 @JacksonXmlRootElement(localName = "book")
 public class Book {
 
+    @NotNull(message = "title is required.")
     private String title;
+    @NotNull(message = "author is required.")
     private String author;
     private String isbn;
     private Date published;
