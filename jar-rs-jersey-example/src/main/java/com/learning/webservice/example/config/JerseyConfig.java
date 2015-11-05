@@ -17,6 +17,8 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.core.env.ConfigurableEnvironment;
 
 import javax.ws.rs.core.MediaType;
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,7 +27,9 @@ import java.util.List;
  *
  * @author Ming.Li
  */
-public class JerseyConfig extends ResourceConfig {
+public class JerseyConfig extends ResourceConfig implements Closeable {
+
+    private ConfigurableApplicationContext applicationContext;
 
     /**
      * Used in webapp environment, the servlet is responsible for loading spring context.
@@ -71,6 +75,14 @@ public class JerseyConfig extends ResourceConfig {
                 }
             };
             property("contextConfig", ac);
+            applicationContext = ac;
+        }
+    }
+
+    @Override
+    public void close() throws IOException {
+        if(applicationContext != null){
+            applicationContext.close();
         }
     }
 }

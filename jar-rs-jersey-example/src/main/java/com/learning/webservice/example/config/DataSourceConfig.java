@@ -7,11 +7,11 @@ import org.hsqldb.util.DatabaseManagerSwing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 import javax.annotation.PostConstruct;
-import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
 import java.sql.SQLException;
 
@@ -34,7 +34,7 @@ public class DataSourceConfig {
     private Environment environment;
 
     @Bean
-    public DataSource pooledDataSources() throws PropertyVetoException {
+    public ComboPooledDataSource pooledDataSources() throws PropertyVetoException {
         ComboPooledDataSource dataSource = new ComboPooledDataSource();
         dataSource.setJdbcUrl("jdbc:h2:mem:testDB");
         dataSource.setDriverClass("org.h2.Driver");
@@ -44,7 +44,7 @@ public class DataSourceConfig {
     }
 
     @Bean
-    public DataSource h2DataSource() {
+    public EmbeddedDatabase h2DataSource() {
         EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
         return builder
                 .setName("testDB")
@@ -55,7 +55,7 @@ public class DataSourceConfig {
     }
 
     @Bean
-    public DataSource derbyDataSource() {
+    public EmbeddedDatabase derbyDataSource() {
         EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
         return builder
                 .setName("testDB")
@@ -66,7 +66,7 @@ public class DataSourceConfig {
     }
 
     @Bean
-    public DataSource hsqlDataSource() {
+    public EmbeddedDatabase hsqlDataSource() {
         EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
         return builder
                 .setName("testDB")

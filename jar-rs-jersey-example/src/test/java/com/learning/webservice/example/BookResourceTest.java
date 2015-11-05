@@ -8,20 +8,23 @@ import com.learning.webservice.example.config.JerseyConfig;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.grizzly.connector.GrizzlyConnectorProvider;
 import org.glassfish.jersey.test.JerseyTest;
+import org.glassfish.jersey.test.TestProperties;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.EntityTag;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by Ming.Li on 03/11/2015.
@@ -30,15 +33,19 @@ import static org.junit.Assert.assertTrue;
  */
 public class BookResourceTest extends JerseyTest {
 
+    private JerseyConfig jerseyConfig;
+
     private String book1_id;
     private String book2_id;
 
     @Override
     protected javax.ws.rs.core.Application configure() {
 
-//        enable(TestProperties.LOG_TRAFFIC);
-//        enable(TestProperties.DUMP_ENTITY);
-        return new JerseyConfig();
+        enable(TestProperties.LOG_TRAFFIC);
+        enable(TestProperties.DUMP_ENTITY);
+
+        jerseyConfig = new JerseyConfig(false);
+        return jerseyConfig;
     }
 
     @Override
@@ -54,6 +61,12 @@ public class BookResourceTest extends JerseyTest {
         super.setUp();
         book1_id = (String) toHashMap(addBook("Author 1", "Title 1", new Date(), "1234")).get("id");
         book2_id = (String) toHashMap(addBook("Author 2", "Title 2", new Date(), "2345")).get("id");
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        jerseyConfig.close();
+        super.tearDown();
     }
 
     @Test
