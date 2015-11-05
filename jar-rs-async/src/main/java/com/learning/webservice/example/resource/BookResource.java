@@ -1,34 +1,27 @@
-/*
- * Copyright (c) 2015. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
- * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
- * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
- * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
- * Vestibulum commodo. Ut rhoncus gravida arcu.
- */
-
 package com.learning.webservice.example.resource;
 
-import com.learning.webservice.example.repository.BookDao;
 import com.learning.webservice.example.annotation.PATCH;
 import com.learning.webservice.example.annotation.PoweredBy;
 import com.learning.webservice.example.model.Book;
+import com.learning.webservice.example.repository.BookDao;
 import jersey.repackaged.com.google.common.util.concurrent.FutureCallback;
 import jersey.repackaged.com.google.common.util.concurrent.Futures;
 import jersey.repackaged.com.google.common.util.concurrent.ListenableFuture;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.glassfish.jersey.process.internal.RequestScoped;
 import org.glassfish.jersey.server.ContainerRequest;
 import org.glassfish.jersey.server.ManagedAsync;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.inject.Singleton;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.EntityTag;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.Collection;
 
 /**
