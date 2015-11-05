@@ -12,6 +12,7 @@ import org.glassfish.jersey.server.filter.HttpMethodOverrideFilter;
 import org.glassfish.jersey.server.filter.UriConnegFilter;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.MediaType;
 import java.util.HashMap;
 
@@ -22,7 +23,18 @@ import java.util.HashMap;
  */
 public class JerseyConfig extends ResourceConfig {
 
+    /**
+     * Used in webapp environment, the servlet is responsible for loading spring context.
+     */
     public JerseyConfig() {
+        this(true);
+    }
+
+    /**
+     * Used in standalone application environment, the application itself decides whether to load spring context.
+     * @param springContextLoaded indicate if spring context is loaded.
+     */
+    public JerseyConfig(final boolean springContextLoaded) {
         // create a resource config that scans for JAX-RS resources and providers
         // in com.learning.webservice.example package
 
@@ -42,7 +54,10 @@ public class JerseyConfig extends ResourceConfig {
                 .property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true)
                 .register(HttpMethodOverrideFilter.class)
                 .register(new UriConnegFilter(mappings, null))
-                .property("contextConfig", new AnnotationConfigApplicationContext(SpringAnnotationConfig.class))
         ;
+
+        if(!springContextLoaded) {
+            property("contextConfig", new AnnotationConfigApplicationContext(SpringAnnotationConfig.class));
+        }
     }
 }

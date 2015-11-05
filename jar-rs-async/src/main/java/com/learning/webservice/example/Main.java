@@ -22,12 +22,9 @@ public class Main {
      * @return Grizzly HTTP server.
      */
     public static HttpServer createServer() {
-
-        final BookDao bookDao = new BookDao();
-
         // create a resource config that scans for JAX-RS resources and providers
         // in com.learning.webservice.example package
-        final ResourceConfig rc = new JerseyConfig();
+        final ResourceConfig rc = new JerseyConfig(false);
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
@@ -58,4 +55,3 @@ public class Main {
         Thread.currentThread().join(0);
     }
 }
-
