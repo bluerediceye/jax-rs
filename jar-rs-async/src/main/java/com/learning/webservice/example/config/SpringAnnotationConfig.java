@@ -19,7 +19,7 @@ import javax.annotation.PostConstruct;
  */
 @Configuration
 @ComponentScan(basePackageClasses = Application.class)
-@PropertySource(value = "classpath:application.properties")
+@PropertySource("classpath:application.properties")
 public class SpringAnnotationConfig {
 
     private Logger LOG = LoggerFactory.getLogger(SpringAnnotationConfig.class);

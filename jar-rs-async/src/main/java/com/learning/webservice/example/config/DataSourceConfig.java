@@ -1,13 +1,10 @@
 package com.learning.webservice.example.config;
 
-import com.google.common.collect.Lists;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.h2.tools.Server;
 import org.hsqldb.util.DatabaseManagerSwing;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
@@ -24,6 +21,12 @@ import java.util.Arrays;
  * @author Ming.Li
  */
 @Configuration
+@PropertySources(
+        {
+                @PropertySource("classpath:database.properties"),
+                @PropertySource("classpath:c3p0.properties")
+        }
+)
 public class DataSourceConfig {
 
     @Autowired

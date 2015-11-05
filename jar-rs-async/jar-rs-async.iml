@@ -3,10 +3,12 @@
   <component name="FacetManager">
     <facet type="Spring" name="Spring">
       <configuration>
-        <fileset id="fileset" name="Spring Application Context" removed="false">
-          <file>jar://$MAVEN_REPOSITORY$/org/glassfish/jersey/ext/jersey-spring3/2.22.1/jersey-spring3-2.22.1.jar!/jersey-spring-applicationContext.xml</file>
+        <fileset id="fileset2" name="Spring Application Context" removed="false">
+          <file>file://$MODULE_DIR$/src/main/java/com/learning/webservice/example/config/DataSourceConfig.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/com/learning/webservice/example/config/HibernateConfig.java</file>
           <file>file://$MODULE_DIR$/src/main/java/com/learning/webservice/example/config/SpringAnnotationConfig.java</file>
-          <file>file://$MODULE_DIR$/src/main/resources/applicationContext.xml</file>
+          <file>jar://$MAVEN_REPOSITORY$/org/glassfish/jersey/ext/jersey-spring3/2.22.1/jersey-spring3-2.22.1.jar!/jersey-spring-applicationContext.xml</file>
+          <file>file://$MAVEN_REPOSITORY$/org/glassfish/jersey/ext/jersey-spring3/2.22.1/jersey-spring3-2.22.1.jar</file>
         </fileset>
       </configuration>
     </facet>

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
@@ -21,6 +22,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 @Import({DataSourceConfig.class})
+@PropertySource("classpath:hibernate.properties")
 public class HibernateConfig {
 
     @Autowired(required = false)
