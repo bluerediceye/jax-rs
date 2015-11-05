@@ -36,6 +36,4 @@ public class SpringAnnotationConfig {
     public void displayApplicationVersion(){
         LOG.info("Application version: " + applicationVersion);
     }
-
-
 }

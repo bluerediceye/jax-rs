@@ -12,7 +12,6 @@ import org.glassfish.jersey.server.filter.HttpMethodOverrideFilter;
 import org.glassfish.jersey.server.filter.UriConnegFilter;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.MediaType;
 import java.util.HashMap;
 
