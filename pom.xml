@@ -23,7 +23,7 @@
         <module>jax-rs-standalone-server</module>
         <module>jax-rs-webapp-server</module>
         <module>jax-rs-exercise</module>
-        <module>jar-rs-async</module>
+        <module>jar-rs-jersey-example</module>
     </modules>
 
     <dependencyManagement>
