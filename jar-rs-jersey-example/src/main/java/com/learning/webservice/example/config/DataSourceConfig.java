@@ -1,5 +1,6 @@
 package com.learning.webservice.example.config;
 
+import com.learning.webservice.example.config.mode.util.ModeUtils;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.h2.tools.Server;
 import org.hsqldb.util.DatabaseManagerSwing;
@@ -13,7 +14,6 @@ import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
 import java.sql.SQLException;
-import java.util.Arrays;
 
 /**
  * Created by Ming.Li on 05/11/2015.
@@ -21,6 +21,7 @@ import java.util.Arrays;
  * @author Ming.Li
  */
 @Configuration
+@DependsOn("initApplicationMode")
 @PropertySources(
         {
                 @PropertySource("classpath:database.properties"),
@@ -76,20 +77,20 @@ public class DataSourceConfig {
     }
 
     @Bean
-    @Profile("webapp")
+    @Profile("WEBAPP")
     public Server h2WebServer() throws SQLException {
         return Server.createWebServer("-web","-webAllowOthers", "-webPort", "8088", "-browser").start();
     }
 
     @Bean
-    @Profile("webapp")
+    @Profile("WEBAPP")
     public Server h2TcpServer() throws SQLException {
         return Server.createTcpServer("-tcp", "-tcpAllowOthers","-tcpPort", "9099").start();
     }
 
     @PostConstruct
     public void startDatabaseManager() throws SQLException {
-        if (!Arrays.asList(environment.getActiveProfiles()).contains("webapp")) {
+        if (ModeUtils.isStandalone()) {
             //hsqldb
             //DatabaseManagerSwing.main(new String[] { "--url", "jdbc:hsqldb:mem:testdb", "--user", "sa", "--password", "" });
 

@@ -5,15 +5,20 @@ import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.fasterxml.jackson.jaxrs.xml.JacksonJaxbXMLProvider;
 import com.fasterxml.jackson.jaxrs.xml.JacksonXMLProvider;
+import com.google.common.collect.Lists;
 import com.learning.webservice.example.Application;
+import com.learning.webservice.example.config.mode.ApplicationMode;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.server.filter.HttpMethodOverrideFilter;
 import org.glassfish.jersey.server.filter.UriConnegFilter;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
 
 import javax.ws.rs.core.MediaType;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Ming.Li on 03/11/2015.
@@ -56,7 +61,16 @@ public class JerseyConfig extends ResourceConfig {
         ;
 
         if(!springContextLoaded) {
-            property("contextConfig", new AnnotationConfigApplicationContext(SpringAnnotationConfig.class));
+            ConfigurableApplicationContext ac = new AnnotationConfigApplicationContext(SpringAnnotationConfig.class){
+                @Override
+                public ConfigurableEnvironment createEnvironment() {
+                    ConfigurableEnvironment environment = super.createEnvironment();
+                    List<String> profiles = Lists.asList(ApplicationMode.STANDALONE.toString(), environment.getActiveProfiles());
+                    environment.setActiveProfiles(profiles.toArray(new String[profiles.size()]));
+                    return environment;
+                }
+            };
+            property("contextConfig", ac);
         }
     }
 }

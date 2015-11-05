@@ -19,7 +19,7 @@
 
     <context-param>
         <param-name>spring.profiles.active</param-name>
-        <param-value>webapp</param-value>
+        <param-value>WEBAPP</param-value>
     </context-param>
 
     <listener>

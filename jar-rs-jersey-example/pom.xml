@@ -246,6 +246,10 @@
             <artifactId>jcabi-xml</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations-java5</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
